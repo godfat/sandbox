@@ -1,0 +1,14 @@
+
+desc "XD"
+task :t1, :a1 do |t, args|
+  p args[:a1]
+end
+
+desc "ZZZ"
+task :t2 do
+  Rake::Task[:t1].execute
+end
+
+task :set_env do
+  ENV['a1'] ||= 'gocha'
+end
