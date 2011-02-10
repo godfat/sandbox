@@ -81,6 +81,28 @@ Lab772#5727:
 
 Lab789#5744:
 
+Lab751#5706:
+  beaten_by: none
+  HP: 480
+  Spirit: 35
+  charms:
+    - Sould Shield
+    - Titan
+    - Infusion x4
+    - Absorb
+    - repeating
+
+Lab752#5707:
+  beaten_by: tank
+  HP: 930
+  Spirit: 24
+  charms:
+    - Sould Shield
+    - Titan x5
+    - Steal Weapon
+    - Double Claw
+    - repeating
+
 melee:
   - Blood Pact x1
   - Life Siphon x2
@@ -119,6 +141,26 @@ melee:
   - Lightning Spike x4
   - Tears of Matar x1
   - Pyromaniac's Sigil x1
+
+tank:
+  - True Sight x1
+  - Divine Intervention x2
+  - Drug Inhibitor x1
+  - Corrupted Minion x1
+  - Mana Leech x1
+  - Ruler's Helm x2
+  - Echo Shield x2
+  - Glorious Protector x1
+  - Mithril Helm x1
+  - Shield of the Brave x3
+  - Life Siphon x2
+  - Soul Feast x1
+  - Gaea's Blessing x1
+  - Power Leak x2
+  - Nervous Poison x1
+  - Earth Dragon Crown x2
+  - Demoniac Deal x1
+  - Glorious Lance x1
 
 spirit:
   - Echo Shield x2
