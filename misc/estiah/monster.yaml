@@ -1,0 +1,122 @@
+Lab785#5740:
+  beaten_by: none
+  HP: 1380
+  Spirit: 50
+  charms:
+    - Rake
+    - Strong Blow
+
+Lab783#5738:
+  beaten_by: none
+  HP: 2190
+  Spirit: 20
+  charms:
+    - Soul Shield
+    - Infusion x3
+    - Spellsteal
+    - repeating
+
+Lab786#5741:
+  beaten_by: melee
+  HP: 1500
+  Spirit: 50
+  charms:
+    - Blow
+    - Barrier
+    - Grey Eye
+
+Lab758#5713:
+  beaten_by: melee
+  HP: 330
+  Spirit: 32
+  charms:
+    - Double Claw
+    - Grey Eye
+    - Strong Blow
+
+Lab769#5724:
+  beaten_by: none
+  HP: 1200
+  Spirit: 30
+  charms:
+    - Soul Shield
+    - Strong Blast
+    - Infusion x3
+    - Mirror
+    - repeating
+
+Lab762#5717:
+  beaten_by: melee
+  HP: 300
+  Spirit: 44
+  charms:
+    - Howl
+
+melee:
+  - Blood Pact x1
+  - Life Siphon x2
+  - Fury of the Elements x2
+  - Blood Frenzy x2
+  - Brutal Blow x2
+  - Forest Medicine x3
+  - Grim Presence x1
+  - Claws of Dark Wisdom x2
+  - Soul Warden x1
+  - Baralas' Legacy x1
+  - Wrath of Dubhe x1
+  - Glorious Slayer x1
+  - Mithril Axe x2
+  - Joyeuse x1
+  - Glorious Claymore x1
+  - Mithril Sword x5
+  - Runeflow Hammer x1
+  - The Hug x1
+  - Glorious Hammer x1
+  - Mithril Mace x3
+  - Finishing Move x1
+  - Warlord's Crest x1
+  - Mana-Powered Thruster x1
+  - Niflungar Lance x1
+  - Niflungar Spear x1
+  - Glorious Lance x1
+  - Mithril Spear x1
+  - Champion's Crest x2
+  - Opening x1
+  - Fist of Hades x1
+  - Glorious Puncher x2
+  - Mithril Knuckles x5
+  - Gaea's Blessing x1
+  - Sanctified Light x1
+  - Lightning Spike x4
+  - Tears of Matar x1
+  - Pyromaniac's Sigil x1
+
+spirit:
+  - Echo Shield x2
+  - Glorious Protector x1
+  - Mithril Helm x1
+  - Gaea's Blessing x1
+  - Blightwood Talisman x3
+  - Purity x1
+  - Life Siphon x2
+  - Fury of the Elements x2
+  - Withering Touch x1
+  - Demoniac Deal x1
+  - Aura of Darkness x3
+  - Searing Mind x1
+  - Looming Terror x2
+  - Soul Feast x1
+  - Soul Wraith x2
+  - Ruler's Helm x2
+  - Shield of the Brave x3
+  - Divine Intervention x2
+  - Drug Inhibitor x1
+  - Forest Medicine x3
+  - Grim Presence x1
+  - Earth Dragon Crown x2
+  - Forcefield x1
+  - Unicorn x1
+  - Corrupted Minion x1
+  - Mana Leech x1
+  - Power Leak x2
+  - Nervous Poison x1
