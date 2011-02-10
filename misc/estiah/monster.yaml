@@ -54,6 +54,33 @@ Lab762#5717:
   charms:
     - Howl
 
+Lab748#5703:
+  beaten_by: none
+  HP: 360
+  Spirit: 36
+  charms:
+    - Harden
+    - Howl x4
+    - Soul Shield
+    - Cleanse
+    - Taitan
+    - Purge
+    - repeating
+
+Lab772#5727:
+  beaten_by: none
+  HP: 1590
+  Spirit: 51
+  charms:
+    - Growl
+    - Howl
+    - Cry
+    - Harden
+    - Barrier
+    - Wall
+
+Lab789#5744:
+
 melee:
   - Blood Pact x1
   - Life Siphon x2
