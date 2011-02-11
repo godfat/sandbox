@@ -1,5 +1,10 @@
 README: http://progenitor-softworks.com/ew/index.php?title=27th_Contest
 
+conclusion: >
+  Godfat 02-11 17:38: So I've defeated 21/56 monsters.
+  At the end it is tiring to spend all action points...
+  Soul Shield, Infusion, and Titan is simply too powerful to fight with.
+
 Lab785#5740:
   beaten_by: none
   HP: 1380
@@ -82,7 +87,7 @@ Lab772#5727:
 Lab789#5744:
   betean_by: none
   HP: 1560
-  Spirit: ?
+  Spirit: '?'
   charms:
     - ?
 
@@ -138,8 +143,8 @@ Lab782#5737:
     - Blast x2
     - repeating
 
-Lab770#5725:
-Lab747#5702:
+Lab770#5725: '?'
+Lab747#5702: '?'
 
 melee:
   - Blood Pact x1
