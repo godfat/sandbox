@@ -91,7 +91,7 @@ Lab751#5706:
   HP: 480
   Spirit: 35
   charms:
-    - Sould Shield
+    - Soul Shield
     - Titan
     - Infusion x4
     - Absorb
@@ -102,11 +102,44 @@ Lab752#5707:
   HP: 930
   Spirit: 24
   charms:
-    - Sould Shield
+    - Soul Shield
     - Titan x5
     - Steal Weapon
     - Double Claw
     - repeating
+
+Lab775#5730:
+  HP: 1380
+
+Lab#739#5694:
+  beaten_by: none
+  HP: 930
+  Spirit: 33
+  charms:
+    - Soul Shield
+    - Strong Blast x3
+    - Infusion x5
+    - Mirror
+    - Titan
+    - repeating
+
+Lab782#5737:
+  beaten_by: none
+  HP: 300
+  Spirit: 48
+  charms:
+    - Soul Shield
+    - Titan x3
+    - Crystal Skin x2
+    - Mirror
+    - Strong Blow
+    - Blow
+    - Assault
+    - Blast x2
+    - repeating
+
+Lab770#5725:
+Lab747#5702:
 
 melee:
   - Blood Pact x1
