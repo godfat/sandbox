@@ -90,17 +90,98 @@ class Parser
     end
   end
 
-  class HandWritten
-    def initialize sock; self.sock = sock; end
-    def evaluate
-      expression
+  class ParseError < RuntimeError; end
+
+  class CircularList
+    def initialize size
+      self.data = Array.new(size)
+      self.pos  = 0
+    end
+
+    def [] index; data[(pos + index) % size]; end
+    def size    ; data.size                 ; end
+    def head    ; data[0]                   ; end
+    alias_method :top  , :head
+    alias_method :first, :head
+
+    def put value
+      data[pos] = value
+      self.pos = (pos + 1) % size
+      self
     end
 
     protected
-    attr_accessor :sock
-    def lexer; @lexer ||= Lexer.new(sock); end
-    def expression
+    attr_accessor :data, :pos
+  end
 
+  # LL(3)
+  class HandWritten
+    attr_reader :data
+    def initialize sock; self.sock = sock               ; end
+    def parse          ; self.data = 0; expression; self; end
+
+    protected
+    attr_accessor :sock
+    attr_writer :data
+    def lexer    ; @lexer     ||= Lexer.new(sock)    ; end
+    def consume  ; lookahead.put(lex.gett)           ; end
+
+    def lookahead
+      @lookahead ||= begin
+        @lookahead = CircularList.new(3)
+        3.times{ consume }
+        @lookahead
+      end
+    end
+
+    def match token
+      if token == lookahead
+      end
+    end
+
+    def number
+      lexer.gett
+    end
+
+    def op0
+      if op0?
+
+      else
+        raise ParseError.new
+      end
+    end
+
+    def op0?
+      lookahead.head == Token::Multiply ||
+      lookahead.head == Token::Divide
+    end
+
+    def op1?
+      lookahead.head == Token::Plus     ||
+      lookahead.head == Token::Substract
+    end
+
+    def factor
+      if number?
+      elsif lookahead[0] == Token::ParenthesisL &&
+            lookahead[1] == expression
+      end
+    end
+
+    def term
+      factor
+      if op0?
+        op0
+        term
+      end
+    end
+
+    def expression
+      term
+      if op1?
+        op1
+        expression
+      end
     end
   end
 end
@@ -141,7 +222,7 @@ if $PROGRAM_NAME == __FILE__
 
     describe Parser::HandWritten do
       should 'parse 1+2+3=6' do
-        Parser::HandWritten.new('1+2+3').evaluate.should == 6
+        Parser::HandWritten.new('1+2+3').parse.data.should == 6
       end
     end
   end
