@@ -43,7 +43,7 @@ class Parser
   class Lexer
     class Token
       attr_accessor :data
-      private :data=
+      protected :data=
       def initialize data; self.data = data; end
     end
 
@@ -69,7 +69,7 @@ class Parser
       end
     end
 
-    private
+    protected
     attr_accessor :sock
     def reader; @reader ||= Reader.new(sock); end
 
