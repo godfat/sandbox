@@ -39,4 +39,74 @@ class Parser
 
     ^\g<expression>$
   }x
+
+  class Lexer
+    class Token
+      attr_accessor :data
+      private :data=
+      def initialize data; self.data = data; end
+    end
+
+    ParenthesisL = Token.new('(')
+    ParenthesisR = Token.new(')')
+    Multiply     = Token.new('*')
+    Divide       = Token.new('/')
+    Plus         = Token.new('+')
+    Substract    = Token.new('-')
+
+    def initialize sock; self.sock = sock; end
+
+    def gett
+      case c = reader.getc
+        when   ''; gett
+        when  '('; ParenthesisL
+        when  ')'; ParenthesisR
+        when  '*'; Multiply
+        when  '/'; Divide
+        when  '+'; Plus
+        when  '-'; Substract
+        when /\d/; Token.new(number(c))
+      end
+    end
+
+    private
+    attr_accessor :sock
+    def reader; @reader ||= Reader.new(sock); end
+
+    def number c
+      int = c + read_number
+      if reader.peek == '.'
+        reader.getc
+        "#{int}.#{read_number}".to_f
+      else
+        int.to_i
+      end
+    end
+
+    def read_number
+      r = ''
+      r << reader.getc while (c = reader.peek) =~ /\d/
+      r
+    end
+  end
+end
+
+if $PROGRAM_NAME == __FILE__
+  require 'bacon'
+  Bacon.summary_on_exit
+  describe Parser::Lexer do
+    should 'lex 1+2+3' do
+      exp = '1+2+3'
+      lex = Parser::Lexer.new(exp)
+      exp.each_char{ |c|
+        t = if c =~ /\d/ then c.to_i else c end
+        lex.gett.data.should == t
+      }
+      lambda{ lex.gett }.should.raise(EOFError)
+    end
+
+    should 'lex 5.6' do
+      Parser::Lexer.new('5.6').gett.data.should == 5.6
+    end
+  end
 end
