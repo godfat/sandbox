@@ -89,24 +89,60 @@ class Parser
       r
     end
   end
+
+  class HandWritten
+    def initialize sock; self.sock = sock; end
+    def evaluate
+      expression
+    end
+
+    protected
+    attr_accessor :sock
+    def lexer; @lexer ||= Lexer.new(sock); end
+    def expression
+
+    end
+  end
 end
 
 if $PROGRAM_NAME == __FILE__
   require 'bacon'
   Bacon.summary_on_exit
-  describe Parser::Lexer do
-    should 'lex 1+2+3' do
-      exp = '1+2+3'
-      lex = Parser::Lexer.new(exp)
-      exp.each_char{ |c|
-        t = if c =~ /\d/ then c.to_i else c end
-        lex.gett.data.should == t
-      }
-      lambda{ lex.gett }.should.raise(EOFError)
+
+  describe Parser do
+    before do
+      @exps = %w[1+2+3 5*2+6 (1+2)*4 1+2*4 5+6.1*3 1-4/8]
+      @anws =   [6   , 16  , 12    , 9   , 23.9  , 0.5]
+      @bads = %w[1.2a  1..6  (1+2*4  67+   5)      1-5//5]
     end
 
-    should 'lex 5.6' do
-      Parser::Lexer.new('5.6').gett.data.should == 5.6
+    describe 'Parser::RegularExpression' do
+      should 'match or not match various things' do
+        @exps.each{ |exp| exp.should =~ Parser::RegularExpression }
+        @bads.each{ |exp| exp.should !~ Parser::RegularExpression }
+      end
+    end
+
+    describe Parser::Lexer do
+      should 'lex 1+2+3' do
+        exp = '1+2+3'
+        lex = Parser::Lexer.new(exp)
+        exp.each_char{ |c|
+          t = if c =~ /\d/ then c.to_i else c end
+          lex.gett.data.should == t
+        }
+        lambda{ lex.gett }.should.raise(EOFError)
+      end
+
+      should 'lex 5.6' do
+        Parser::Lexer.new('5.6').gett.data.should == 5.6
+      end
+    end
+
+    describe Parser::HandWritten do
+      should 'parse 1+2+3=6' do
+        Parser::HandWritten.new('1+2+3').evaluate.should == 6
+      end
     end
   end
 end
