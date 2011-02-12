@@ -1,7 +1,7 @@
 # encoding: utf-8
 
 class Parser
-  Expression = %r{
+  RegularExpression = %r{
     (?<number>    \d+(\.\d+)?                           ){0}
     (?<op0>       \*         | \/                       ){0}
     (?<op1>       \+         | \-                       ){0}
