@@ -58,7 +58,7 @@ class Parser
 
     def gett
       case c = reader.getc
-        when   ''; gett
+        when /\s/; gett
         when  '('; ParenthesisL
         when  ')'; ParenthesisR
         when  '*'; Multiply
