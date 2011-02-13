@@ -8,8 +8,8 @@ FactFiber = lambda{
 
 FactEnume = lambda{
   Enumerator.new{ |fiber|
-          fiber <<    r  = x  = 1
-    loop{ fiber <<    r *= x += 1  }
+          fiber.yield(r  = x  = 1)
+    loop{ fiber.yield(r *= x += 1) }
   }
 }
 
