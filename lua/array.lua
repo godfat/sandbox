@@ -33,14 +33,15 @@ function lub.Array:each(yield)
   return self
 end
 
-function lub.Array:join(separate)
-  local result = ''
-  self:each(function(v, i)
-    if i < self:size()-1 then
-      result = result .. v .. separate or ''
-    end
-  end)
-  return result .. self:last()
+function lub.Array:join(delimiter)
+  -- local result = ''
+  -- self:each(function(v, i)
+  --   if i < self:size()-1 then
+  --     result = result .. v .. delimiter or ''
+  --   end
+  -- end)
+  -- return result .. self:last()
+  return table.concat(self['data'], delimiter or '')
 end
 
 function lub.Array:inspect()
