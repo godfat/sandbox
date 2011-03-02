@@ -69,28 +69,80 @@ function lub.Array:assign(index, value, default)
   end
 end
 
--- function lub.Array:rotate(arg)
---   local offset = arg or 1
---   local result = {}
---   for i, v in ipair(self['data'])
---
---   end
---   return Array.new(result)
--- end
---
--- function lub.Array.rotate_inplace(arg)
---   self['data'] = self:rotate()['data']
---   return self
--- end
+function lub.Array:dup()
+  local result = {}
+  self:each(function(v, i)
+    result[i+1] = v
+  end)
+  return lub.Array.new(result)
+end
+
+function lub.Array:range(first, last)
+  local result = {}
+  local step = first
+  while step < last do
+    result[step+1-first] = self:at(step)
+    step = step + 1
+  end
+  return lub.Array.new(result)
+end
+
+function lub.Array:push(value)
+  return self:assign(self:size(), value)
+end
+
+function lub.Array:concat(rhs)
+  local result = self:dup()
+  rhs:each(function(v, i)
+    result:push(v)
+  end)
+  return result
+end
+
+-- use range_inplace instead???
+function lub.Array:rotate(arg)
+  local offset = arg or 1
+  if offset > 0 then
+    return lub.Array.concat(
+      self:range(offset, self:size()),
+      self:range(0, offset))
+  else
+    return lub.Array.concat(
+      self:range(self:size() + offset, self:size()),
+      self:range(0, self:size() + offset))
+  end
+end
+
+function lub.Array:rotate_inplace(arg)
+  self['data'] = self:rotate()['data']
+  return self
+end
 
 local a = lub.Array.new({'a', 'b', 'c'})
-print(a:first() == 'a') -- a
-print(a:at(0) == 'a') -- a
-print(a:size() == 3) -- 3
-print(a:last() == 'c') -- c
+print(a:first() == 'a')
+print(a:at(0) == 'a')
+print(a:size() == 3)
+print(a:last() == 'c')
 print(a:inspect() == '[a, b, c]')
+print(a:concat(a):inspect() == '[a, b, c, a, b, c]')
+print(a:dup():inspect() == a:inspect())
+print(a:dup() ~= a)
+a:dup():assign(0, 'd')
+print(a:inspect() == '[a, b, c]')
+print(a:assign(3, 'd') == 'd')
+print(a:inspect() == '[a, b, c, d]')
+print(a:range(1,3):inspect() == '[b, c]')
+print(a:rotate( 1):inspect() == '[b, c, d, a]')
+print(a:rotate( 2):inspect() == '[c, d, a, b]')
+print(a:rotate( 3):inspect() == '[d, a, b, c]')
+print(a:rotate(-1):inspect() == '[d, a, b, c]')
+print(a:rotate(-2):inspect() == '[c, d, a, b]')
+print(a:rotate(-3):inspect() == '[b, c, d, a]')
+print(a:inspect() == '[a, b, c, d]')
+print(a:rotate_inplace():inspect() == '[b, c, d, a]')
+print(a:inspect() == '[b, c, d, a]')
 a:reserve(5)
-print(a:size() == 5) -- 5
-print(a:assign(10, 5) == 5) -- 5
-print(a:at(10) == 5) -- 5
-print(a:size() == 11) -- 11
+print(a:size() == 5)
+print(a:assign(10, 5) == 5)
+print(a:at(10) == 5)
+print(a:size() == 11)
