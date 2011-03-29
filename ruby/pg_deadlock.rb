@@ -10,6 +10,16 @@
 # > ruby -v
 #   ruby 1.9.2p180 (2011-02-18 revision 30909) [x86_64-darwin10.6.0]
 
+# > ruby ruby/pg_deadlock.rb
+# ruby/pg_deadlock.rb:24:in `exec': ERROR:  deadlock detected (PGError)
+# DETAIL:  Process 10549 waits for ShareLock on transaction 1711030; blocked by process 10550.
+# Process 10550 waits for ExclusiveLock on tuple (0,5) of relation 290358 of database 289830; blocked by process 10549.
+# HINT:  See server log for query details.
+#         from ruby/pg_deadlock.rb:24:in `exec'
+#         from ruby/pg_deadlock.rb:49:in `block in <main>'
+#         from ruby/pg_deadlock.rb:42:in `fork'
+#         from ruby/pg_deadlock.rb:42:in `<main>'
+
 require 'pg'
 
 class Db
