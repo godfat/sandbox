@@ -1,5 +1,15 @@
 
 # http://mina.naguib.ca/blog/2010/11/22/postgresql-foreign-key-deadlocks.html
+
+# > pg_ctl --version
+#   pg_ctl (PostgreSQL) 9.0.3
+
+# > gem list pg
+#   pg (0.10.1)
+
+# > ruby -v
+#   ruby 1.9.2p180 (2011-02-18 revision 30909) [x86_64-darwin10.6.0]
+
 require 'pg'
 
 class Db
