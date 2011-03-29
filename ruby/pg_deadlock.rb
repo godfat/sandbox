@@ -61,7 +61,7 @@ pid = Process.fork do
   SQL
   sleep(0.5)
   d0.exec(<<-SQL)
-    commit;
+  commit;
   SQL
 end
 
@@ -78,7 +78,7 @@ if pid
   SQL
   sleep(0.5)
   d1.exec(<<-SQL)
-    commit;
+  commit;
   SQL
 
   Process.wait
