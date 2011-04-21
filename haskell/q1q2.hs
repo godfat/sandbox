@@ -1,5 +1,5 @@
 
-import Data.List
+import Data.List (intercalate)
 
 q1 :: String -> String
 q1 = intercalate " " . map reverse . words
