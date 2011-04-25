@@ -93,29 +93,44 @@ class Parser
 
   class ParseError < RuntimeError; end
 
-  class CircularList
-    def initialize size
-      self.data = Array.new(size)
-      self.pos  = 0
+  class Buffer
+    def initialize lexer
+      self.lexer = lexer
+      self.data  = []
+      self.stack = []
+      self.pos   = 0
     end
 
-    def [] index; data[(pos + index) % size]; end
-    def size    ; data.size                 ; end
-    def head    ; data[0]                   ; end
-    alias_method :top  , :head
-    alias_method :first, :head
+    def [] i    ; sync(i); data[pos + i]; end
+    def size    ; data.size           ; end
+    def head    ; data[pos]           ; end
+    def mark    ; stack.push(pos); pos; end
+    def release ; self.data = data[0..self.pos = stack.pop]; end
+    def speculating?; !stack.empty?   ; end
 
-    def put value
-      data[pos] = value
-      self.pos = (pos + 1) % size
+    def consume
+      self.pos += 1
+      unless speculating?
+        self.pos = 0
+        data.clear
+      end
+      data[pos] = lexer.gett
       self
     end
 
     protected
-    attr_accessor :data, :pos
+    attr_accessor :lexer, :data, :stack, :pos
+
+    def sync n
+      fill(d) if n > d = data.size - pos
+    end
+
+    def fill
+      d.times{ data << }
+    end
   end
 
-  # LL(3)
+  # LL(1)
   class HandWritten
     attr_reader :data
     def initialize sock; self.sock = sock               ; end
@@ -125,14 +140,10 @@ class Parser
     attr_accessor :sock
     attr_writer :data
     def lexer    ; @lexer     ||= Lexer.new(sock)    ; end
-    def consume  ; lookahead.put(lex.gett)           ; end
+    def consume  ; @lookahead = nil           ; end
 
     def lookahead
-      @lookahead ||= begin
-        @lookahead = CircularList.new(3)
-        3.times{ consume }
-        @lookahead
-      end
+      @lookahead ||= lexer.gett
     end
 
     def match token
@@ -141,7 +152,7 @@ class Parser
     end
 
     def number
-      lexer.gett
+      match(Token::)
     end
 
     def op0
@@ -162,10 +173,19 @@ class Parser
       lookahead.head == Token::Substract
     end
 
+    def op1
+      consume
+    end
+
+    def op0
+      consume
+    end
+
     def factor
       if number?
-      elsif lookahead[0] == Token::ParenthesisL &&
-            lookahead[1] == expression
+        number
+      else
+        group
       end
     end
 
