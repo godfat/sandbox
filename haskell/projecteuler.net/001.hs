@@ -1,6 +1,6 @@
 
 {-
-Problem 1
+Problem 1 http://projecteuler.net/index.php?section=problems&id=1
 05 October 2001
 
 If we list all the natural numbers below 10 that are multiples of 3 or 5,
