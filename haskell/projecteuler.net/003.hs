@@ -29,6 +29,7 @@ prime_factors n ps =
 
 repeat_factors :: Int -> (Int, [Int]) -> (Int, [Int])
 repeat_factors i (m, r)
+  | m         == 1 = (m, r)
   | m `mod` i == 0 = repeat_factors i (m `div` i, i : r)
   | otherwise      = (m, r)
 
