@@ -35,4 +35,4 @@ repeat_factors i (m, r)
 
 ----------------------------------------------------------------------
 
-main = putStrLn . show $ prime_factors 600851475143 faster_primes
+main = putStrLn . show $ last (prime_factors 600851475143 faster_primes)
