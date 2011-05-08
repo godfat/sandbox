@@ -34,6 +34,7 @@ test6 :: DUnit -> ()
 test6   ~DUnit  = ()
 
 -- always True
+-- Warning: Pattern match(es) are overlapped
 test7 :: Bool -> Bool
 test7 ~True = True
 test7 False = False
