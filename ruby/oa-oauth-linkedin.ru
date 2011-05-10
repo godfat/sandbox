@@ -61,6 +61,7 @@ end
 
 run lambda{ |env|
   if env['omniauth.auth'].nil?
+    # 404 is required, otherwise oa-oauth would skip authorization
     [404, {}, ["go to /auth/linkedin\n"]]
   else
     [200,
