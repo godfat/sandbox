@@ -1,6 +1,4 @@
 
-require.paths.unshift "/usr/local/lib/node_modules/express/lib"
-
 express = require 'express'
 
 app = express.createServer()
