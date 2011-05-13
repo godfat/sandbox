@@ -10,7 +10,7 @@ Array::foldr = (func, init) ->
     this.tail().foldr(func, func(this.head(), init))
 ###
 
-Array::foldr = Array.prototype.reduceRight
+Array::foldr = Array::reduceRight
 
 Array::max = ->
   @tail().foldr(
