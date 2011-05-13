@@ -13,28 +13,28 @@ Array::foldr = (func, init) ->
 Array::foldr = Array.prototype.reduceRight
 
 Array::max = ->
-  this.tail().foldr(
+  @tail().foldr(
     (i, r) -> if i > r
                 i
               else
                 r
-    this.head())
+    @head())
 
 Array::min = ->
-  this.tail().foldr(
+  @tail().foldr(
     (i, r) -> if i < r
                 i
               else
                 r
-    this.head())
+    @head())
 
 Array::zip = (rhs) ->
-  if  this.length == 0
+  if  @length == 0
     rhs
   else if rhs.length == 0
     this
   else
-    [[this.head(), rhs.head()]].concat(this.tail().zip(rhs.tail()))
+    [[@head(), rhs.head()]].concat(@tail().zip(rhs.tail()))
 
 list = [1..10]
 
