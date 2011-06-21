@@ -4,6 +4,8 @@ require 'eventmachine'
 module EchoServer
   def receive_data(data)
     # File.open('emailssssss.txt', 'a+'){ |log| log << data }
+    print(data)
+    send_data(data)
   end
 end
 
