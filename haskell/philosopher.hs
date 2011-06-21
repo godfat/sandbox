@@ -51,28 +51,6 @@ philosopher n buffer tgen fork0 fork1 = do
 
 --
 
-monitor :: TVar [String] -> IO ()
-monitor buffer = do
-  sentences <- atomically (flush buffer)
-  for sentences putStrLn
-  monitor buffer
-
-tell :: TVar [String] -> String -> STM ()
-tell var sentence = do
-  buffer <- readTVar var
-  writeTVar var (buffer ++ [sentence])
-
-flush :: TVar [String] -> STM [String]
-flush var = do
-  buffer <- readTVar var
-  case buffer of
-    [] -> retry
-    _  -> do
-      writeTVar var []
-      return buffer
-
---
-
 elapseSomeTime :: TVar StdGen -> IO Int
 elapseSomeTime tgen = atomically `at` do
   gen <- readTVar tgen
@@ -93,6 +71,28 @@ eat tfork = do
   case fork of
     Free -> writeTVar tfork Hold
     Hold -> retry
+
+--
+
+monitor :: TVar [String] -> IO ()
+monitor buffer = do
+  sentences <- atomically (flush buffer)
+  for sentences putStrLn
+  monitor buffer
+
+tell :: TVar [String] -> String -> STM ()
+tell var sentence = do
+  buffer <- readTVar var
+  writeTVar var (buffer ++ [sentence])
+
+flush :: TVar [String] -> STM [String]
+flush var = do
+  buffer <- readTVar var
+  case buffer of
+    [] -> retry
+    _  -> do
+      writeTVar var []
+      return buffer
 
 --
 
