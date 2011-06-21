@@ -74,7 +74,7 @@ think :: TFork -> STM ()
 think tfork = do
   fork <- readTVar tfork
   case fork of
-    Free -> retry
+    Free -> undefined
     Hold -> writeTVar tfork Free
 
 eat :: TFork -> STM ()
