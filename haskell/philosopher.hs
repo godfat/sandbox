@@ -32,7 +32,6 @@ philosopher :: Int -> TVar [String] -> TVar StdGen -> TFork -> TFork -> IO ()
 philosopher n buffer tgen fork0 fork1 = do
   delay <- elapseSomeTime tgen
   threadDelay delay
-
   atomically `at` do
     tell buffer ("Philosopher " ++ show n ++ " is eating.")
 
@@ -40,6 +39,8 @@ philosopher n buffer tgen fork0 fork1 = do
     eat   fork0
     eat   fork1
 
+  delay <- elapseSomeTime tgen
+  threadDelay delay
   atomically `at` do
     tell buffer ("Philosopher " ++ show n ++ " is thinking.")
 
