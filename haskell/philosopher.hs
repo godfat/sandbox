@@ -75,13 +75,13 @@ think tfork = do
   fork <- readTVar tfork
   case fork of
     Free -> retry
-    Hold -> writeTVar tfork Hold
+    Hold -> writeTVar tfork Free
 
 eat :: TFork -> STM ()
 eat tfork = do
   fork <- readTVar tfork
   case fork of
-    Free -> writeTVar tfork Free
+    Free -> writeTVar tfork Hold
     Hold -> retry
 
 --
