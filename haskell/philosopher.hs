@@ -30,12 +30,7 @@ newForkSTM = newTVar Free
 
 philosopher :: Int -> TVar [String] -> TVar StdGen -> TFork -> TFork -> IO ()
 philosopher n buffer tgen fork0 fork1 = do
-  delay <- atomically `at` do
-             gen <- readTVar tgen
-             let (delay, gen') = randomR (1, 1000) gen
-             writeTVar tgen gen'
-             return delay
-
+  delay <- elapseSomeTime tgen
   threadDelay delay
 
   atomically `at` do
@@ -77,6 +72,13 @@ flush var = do
       return buffer
 
 --
+
+elapseSomeTime :: TVar StdGen -> IO Int
+elapseSomeTime tgen = atomically `at` do
+  gen <- readTVar tgen
+  let (delay, gen') = randomR (1, 1000) gen
+  writeTVar tgen gen'
+  return delay
 
 think :: TFork -> STM ()
 think tfork = do
