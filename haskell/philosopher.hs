@@ -9,26 +9,20 @@ import Control.Concurrent.STM (atomically, retry, TVar, STM,
                                newTVar, readTVar, writeTVar)
 
 data Fork = Free | Hold deriving (Show, Eq)
-type TFork = TVar Fork
 
 -- WriterT [String] IO Int
 
 main = do
   gen   <- newStdGen >>= \g -> atomically (newTVar g)
-  forks <- atomically forksSTM
+  forks <- atomically (replicateM 5 (newTVar Free))
   buffer <- atomically (newTVar [])
   for [0..4] `at` \i ->
     forkIO `at` philosopher i buffer gen
                   (forks !! i) (forks !! ((i + 1) `mod` 5))
   monitor buffer
 
-forksSTM :: STM [TFork]
-forksSTM = replicateM 5 newForkSTM
-
-newForkSTM :: STM TFork
-newForkSTM = newTVar Free
-
-philosopher :: Int -> TVar [String] -> TVar StdGen -> TFork -> TFork -> IO ()
+philosopher :: Int -> TVar [String] -> TVar StdGen ->
+               TVar Fork -> TVar Fork -> IO ()
 philosopher n buffer tgen fork0 fork1 = do
   delay <- elapseSomeTime tgen
   threadDelay delay
@@ -59,14 +53,14 @@ elapseSomeTime tgen = atomically `at` do
   writeTVar tgen gen'
   return delay
 
-think :: TFork -> STM ()
+think :: TVar Fork -> STM ()
 think tfork = do
   fork <- readTVar tfork
   case fork of
     Free -> undefined
     Hold -> writeTVar tfork Free
 
-eat :: TFork -> STM ()
+eat :: TVar Fork -> STM ()
 eat tfork = do
   fork <- readTVar tfork
   case fork of
