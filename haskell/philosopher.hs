@@ -24,7 +24,7 @@ main = do
 philosopher :: Int -> TVar [String] -> TVar StdGen ->
                TVar Fork -> TVar Fork -> IO ()
 philosopher n buffer tgen fork0 fork1 = do
-  delay <- elapseSomeTime tgen
+  delay <- atomically `at` elapseSomeTime tgen
   threadDelay delay
   atomically `at` do
     tell buffer ("Philosopher " ++ show n ++ " is eating.")
@@ -33,7 +33,7 @@ philosopher n buffer tgen fork0 fork1 = do
     eat   fork0
     eat   fork1
 
-  delay <- elapseSomeTime tgen
+  delay <- atomically `at` elapseSomeTime tgen
   threadDelay delay
   atomically `at` do
     tell buffer ("Philosopher " ++ show n ++ " is thinking.")
@@ -46,8 +46,8 @@ philosopher n buffer tgen fork0 fork1 = do
 
 --
 
-elapseSomeTime :: TVar StdGen -> IO Int
-elapseSomeTime tgen = atomically `at` do
+elapseSomeTime :: TVar StdGen -> STM Int
+elapseSomeTime tgen = do
   gen <- readTVar tgen
   let (delay, gen') = randomR (1, 1000) gen
   writeTVar tgen gen'
