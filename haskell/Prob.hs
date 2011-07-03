@@ -35,9 +35,6 @@ join (Prob prob) = Prob $ concat $ map
 coin :: Prob Bool
 coin = Prob [(True, 1%2), (False, 1%2)]
 
-throw :: [Prob a] -> Prob a
-throw = foldr1 (>>)
-
 ----------------------------------------------------------------------------
 
 functorLawId :: Eq a => Prob a -> Bool
