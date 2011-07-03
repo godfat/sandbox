@@ -49,6 +49,12 @@ monadLawId :: Eq b => Fun a b -> a -> Bool
 monadLawId (Fun _ f) x =
   ((return :: b -> Prob b) . f) x == (fmap f . return) x
 
+monadLawLeftId :: Eq b => Fun a (Prob b) -> a -> Bool
+monadLawLeftId (Fun _ f) x = ((return x) >>= f) == f x
+
+monadLawRightId :: Eq a => Prob a -> Bool
+monadLawRightId prob = (prob >>= return) == prob
+
 ----------------------------------------------------------------------------
 
 instance Arbitrary a => Arbitrary (Prob a) where
@@ -60,5 +66,7 @@ main = do
   quickCheck (functorLawId :: Prob  Int -> Bool)
   quickCheck (functorLawId :: Prob Bool -> Bool)
   quickCheck (functorLawComposition ::
-                (Fun Char Int) -> (Fun Bool Char) -> Prob Bool -> Bool)
+                Fun Char Int -> Fun Bool Char -> Prob Bool -> Bool)
   quickCheck (monadLawId :: Fun Int Char -> Int -> Bool)
+  quickCheck (monadLawLeftId :: Fun Bool (Prob Int) -> Bool -> Bool)
+  quickCheck (monadLawRightId :: Prob Int -> Bool)
