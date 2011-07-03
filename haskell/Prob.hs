@@ -2,6 +2,7 @@
 module Prob (Prob, join) where
 
 import Data.Ratio (Rational, (%))
+
 import Control.Applicative (Applicative, pure, (<$>), (<*>))
 
 import Test.QuickCheck (quickCheck)
@@ -38,9 +39,15 @@ coin = Prob [(True, 1%2), (False, 1%2)]
 functorLawId :: Eq a => Prob a -> Bool
 functorLawId prob = fmap id prob == id prob
 
-functorLawComposition :: Eq c => (Fun b c) -> (Fun a b) -> Prob a -> Bool
+functorLawComposition :: Eq c => Fun b c -> Fun a b -> Prob a -> Bool
 functorLawComposition (Fun _ f) (Fun _ g) prob =
   fmap (f . g) prob == (fmap f . fmap g) prob
+
+----------------------------------------------------------------------------
+
+monadLawId :: Eq b => Fun a b -> a -> Bool
+monadLawId (Fun _ f) x =
+  ((return :: b -> Prob b) . f) x == (fmap f . return) x
 
 ----------------------------------------------------------------------------
 
@@ -54,3 +61,4 @@ main = do
   quickCheck (functorLawId :: Prob Bool -> Bool)
   quickCheck (functorLawComposition ::
                 (Fun Char Int) -> (Fun Bool Char) -> Prob Bool -> Bool)
+  quickCheck (monadLawId :: Fun Int Char -> Int -> Bool)
