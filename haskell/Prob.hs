@@ -2,6 +2,7 @@
 module Prob (Prob, join) where
 
 import Data.Ratio (Rational, (%))
+import Data.List (groupBy, sortBy, find)
 
 import Control.Applicative (Applicative, pure, (<$>), (<*>))
 import Control.Monad ((<=<))
@@ -34,6 +35,13 @@ join (Prob prob) = Prob $ concat $ map
 
 coin :: Prob Bool
 coin = Prob [(True, 1%2), (False, 1%2)]
+
+collapse :: (Eq a, Ord a) => Prob a -> Prob a
+collapse (Prob prob) =
+  Prob $ (concat . group . sort) prob where
+    sort   =  sortBy (\x y -> compare (fst x) (fst y))
+    group  = groupBy (\x y -> fst x == fst y)
+    concat = map (foldr1 (\(x, p) (_, p') -> (x, p + p')))
 
 ----------------------------------------------------------------------------
 
@@ -83,3 +91,11 @@ main = do
                                        Fun Bool (Prob Char) ->
                                        Fun String (Prob Bool) ->
                                        String -> Bool)
+
+-- what's the probability for throwing two coins and they are all True?
+test :: Rational
+test = case maybe of
+         Just (_, p) -> p
+         Nothing     -> 0
+         where maybe = find fst $ getProb $ collapse $
+                         (sequence [coin, coin]) >>= (return . and)
