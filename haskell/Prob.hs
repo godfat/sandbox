@@ -4,6 +4,7 @@ module Prob (Prob, join) where
 import Data.Ratio (Rational, (%))
 
 import Control.Applicative (Applicative, pure, (<$>), (<*>))
+import Control.Monad ((<=<))
 
 import Test.QuickCheck (quickCheck)
 import Test.QuickCheck.Arbitrary (Arbitrary, arbitrary)
@@ -55,6 +56,14 @@ monadLawLeftId (Fun _ f) x = ((return x) >>= f) == f x
 monadLawRightId :: Eq a => Prob a -> Bool
 monadLawRightId prob = (prob >>= return) == prob
 
+monadLawAssociativity :: Eq d =>
+                         Fun c (Prob d) ->
+                         Fun b (Prob c) ->
+                         Fun a (Prob b) -> a -> Bool
+
+monadLawAssociativity (Fun _ f) (Fun _ g) (Fun _ h) x =
+  ((f <=< g) <=< h) x == (f <=< (g <=< h)) x
+
 ----------------------------------------------------------------------------
 
 instance Arbitrary a => Arbitrary (Prob a) where
@@ -70,3 +79,7 @@ main = do
   quickCheck (monadLawId :: Fun Int Char -> Int -> Bool)
   quickCheck (monadLawLeftId :: Fun Bool (Prob Int) -> Bool -> Bool)
   quickCheck (monadLawRightId :: Prob Int -> Bool)
+  quickCheck (monadLawAssociativity :: Fun Char (Prob Int) ->
+                                       Fun Bool (Prob Char) ->
+                                       Fun String (Prob Bool) ->
+                                       String -> Bool)
