@@ -4,7 +4,8 @@ import GHC (runStmt, lookupName, runGhc,
 import DynFlags (defaultDynFlags, dopt,
                  DynFlag(Opt_PrintExplicitForalls))
 import PprTyThing (pprTyThing)
-import Outputable (printDump)
+import Outputable (showSDoc)
+-- import Outputable (printDump)
 import MonadUtils (liftIO)
 
 import GHC.Paths (libdir)
@@ -15,4 +16,5 @@ main = do
     (RunOk names) <- runStmt "0" SingleStep
     (Just thing) <- lookupName (head names)
     let pefas = dopt Opt_PrintExplicitForalls defaultDynFlags
-    liftIO $ printDump (pprTyThing pefas thing)
+    -- liftIO $ printDump (pprTyThing pefas thing)
+    liftIO $ putStrLn $ showSDoc (pprTyThing pefas thing)
