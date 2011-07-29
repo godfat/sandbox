@@ -18,3 +18,11 @@ main = do
     let pefas = dopt Opt_PrintExplicitForalls defaultDynFlags
     -- liftIO $ printDump (pprTyThing pefas thing)
     liftIO $ putStrLn $ showSDoc (pprTyThing pefas thing)
+
+{-
+ghci: ghci: panic! (the 'impossible' happened)
+  (GHC version 7.0.4 for i386-apple-darwin):
+    no package state yet: call GHC.setSessionDynFlags
+
+Please report this as a GHC bug:  http://www.haskell.org/ghc/reportabug
+-}
