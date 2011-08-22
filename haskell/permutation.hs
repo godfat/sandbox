@@ -26,3 +26,16 @@ p' xs n = do
 
 p :: Eq a => [a] -> Int -> [[a]]
 p = curry (nub . (uncurry p'))
+
+--
+
+split :: [a] -> [a] -> [(a, [a])]
+split [] _ = []
+split (x:xs) ys = (x, reverse ys++xs) : split xs (x:ys)
+
+permutation :: Eq a => [a] -> [[a]]
+permutation [] = [[]]
+permutation xs = do
+  (y, ys) <- split xs []
+  zs      <- permutation ys
+  return (y:zs)
