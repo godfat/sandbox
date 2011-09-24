@@ -123,7 +123,7 @@ Because Int parser returns an int instead of a double, so here we use
 
 \section{ Number Parser: alternative }
 The reason why we use `try' for the first parser is because Parsec
-would not do lookahead match by default, and the match begin from
+would not do lookahead match by default, and the match begins from
 the first parser, if it matches, then it won't try the second parser.
 This is why we need to try to parse double first. If we try to parse
 int first, since a double is also an int before the point, it would
