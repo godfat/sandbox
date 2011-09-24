@@ -1,4 +1,6 @@
 
+Arithmetic expression parser using Parsec
+
 \section{ Introduction }
 This program defines a very simple Int parser and Double parser.
 Later we would use those parsers to define our calculator parser.
