@@ -198,7 +198,7 @@ pFactor = pGroup <|> pNum
 
 
 \section{ Term Parser }
-Then a Term is a Factor '*' or '/' a Term, using (*) or (/) on operands.
+Then a Term is a Factor '*' or '/' and a Term, using (*) or (/) on operands.
 Because parser combinator defines an LL parser, we need to put recursive
 cases on the last to avoid endless recursions. A Term is also a Factor,
 otherwise there's no base case. (or we should say Factor is the base case)
