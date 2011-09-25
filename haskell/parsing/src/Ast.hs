@@ -42,12 +42,12 @@ op2 = [binary "+" EPls,
        binary "-" ESub]
 
 unary  :: String -> (Expr -> Expr)         -> Operator Char () Expr
-unary  name f = Prefix (f <$ try (string name))
+unary  name f = Prefix (f <$ try (lexeme (string name)))
 
 binary :: String -> (Expr -> Expr -> Expr) -> Operator Char () Expr
-binary name f = Infix  (f <$ try (string name)) AssocLeft
+binary name f = Infix  (f <$ try (lexeme (string name))) AssocLeft
 
 float      = T.float      lexer
 integer    = T.integer    lexer
 parens     = T.parens     lexer
-reservedOp = T.reservedOp lexer
+lexeme     = T.lexeme     lexer
