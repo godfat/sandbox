@@ -25,26 +25,27 @@ parser, pExpression, pTerm :: Parser Expr
 parser =  pExpression <* eof
 pExpression  =  buildExpressionParser opTable pTerm
 pTerm        =  parens pExpression
-            <|> try (float >>= return . EDou)
-            <|>   (integer >>= return . EInt)
+            <|> try pDou
+            <|>     pInt
+
+pDou = float   >>= return . EDou
+pInt = integer >>= return . EInt
 
 opTable :: OperatorTable Char () Expr
 opTable = [op0, op1, op2]
 
 op0, op1, op2 :: [Operator Char () Expr]
 op0 = [unary  "-" ENeg]
-
 op1 = [binary "*" EMul,
        binary "/" EDiv]
-
 op2 = [binary "+" EPls,
        binary "-" ESub]
 
 unary  :: String -> (Expr -> Expr)         -> Operator Char () Expr
-unary name f = Prefix (reservedOp name >> return f)
+unary  name f = Prefix (f <$ try (string name))
 
 binary :: String -> (Expr -> Expr -> Expr) -> Operator Char () Expr
-binary name f = Infix  (reservedOp name >> return f) AssocLeft
+binary name f = Infix  (f <$ try (string name)) AssocLeft
 
 float      = T.float      lexer
 integer    = T.integer    lexer
