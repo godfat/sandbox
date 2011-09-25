@@ -219,12 +219,10 @@ the syntax instead of actions. We introduce (<&>) to combine parsing
 results instead of using ap (<*>), and `using' instead of fmap (<$>).
 
 \begin{code}
-(<&>) :: (Monad m) => m a -> m b -> m (a, b)
-pa <&> pb = do
-  a <- pa
-  b <- pb
-  return (a, b)
+(<&>) :: (Applicative f) => f a -> f b -> f (a, b)
+(<&>) = liftA2 (,)
 
+using :: (Applicative f) => f (a, b) -> (a -> b -> c) -> f c
 p `using` f = (uncurry f) <$> p
 
 pTerm :: Parser Double
