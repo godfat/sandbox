@@ -13,19 +13,21 @@ Klass.__tostring = function() return "Klass" end
 
 function Klass:new(klass)
   print("Klass' new called")
-  klass = setmetatable(klass or {}, {__index    = Klass,
+  klass = setmetatable(klass or {}, {__index    = self,
                                      __tostring = function()
                                                     return klass.name
                                                   end})
   function klass:new(object)
     print("Cat's new called")
-    object = setmetatable(object or {}, {__index    = klass,
-                                         __tostring = klass.tostring})
+    object = setmetatable(object or {}, {__index    = self,
+                                         __tostring = self.tostring})
     return object
   end
+
   function klass:klass()
     return getmetatable(self).__index
   end
+
   return klass
 end
 
