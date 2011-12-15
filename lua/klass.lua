@@ -9,23 +9,23 @@ module "klass"
 local Klass = {}
 setmetatable(Klass, Klass)
 Klass.__index    = Klass
-Klass.__tostring = function() return "Klass" end
+Klass.__tostring = function(self) return self.name end
+Klass.name       = "Klass"
 
 function Klass:new(klass)
   print("Klass' new called")
-  klass = setmetatable(klass or {}, {__index    = self,
-                                     __tostring = function()
-                                                    return klass.name
-                                                  end})
+  klass = setmetatable(klass or {}, Klass)
+  klass.__index    = klass
+  klass.__tostring = Klass.__tostring
+
   function klass:new(object)
     print("Cat's new called")
-    object = setmetatable(object or {}, {__index    = self,
-                                         __tostring = self.tostring})
+    object = setmetatable(object or {}, klass)
     return object
   end
 
   function klass:klass()
-    return getmetatable(self).__index
+    return getmetatable(self)
   end
 
   return klass
