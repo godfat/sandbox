@@ -2,6 +2,7 @@
 local setmetatable = setmetatable
 local tostring     = tostring
 local print        = print
+local getmetatable = getmetatable
 
 module "klass"
 
@@ -11,33 +12,36 @@ Klass.__index    = Klass
 Klass.__tostring = function() return "Klass" end
 
 function Klass:new(klass)
-  klass = setmetatable(klass or {}, self)
-  function klass:new(...)
-    local object = setmetatable({}, self)
-    self.__index = self
-    self.__tostring = object.tostring
-    object:init(...)
+  print("Klass' new called")
+  klass = setmetatable(klass or {}, {__index    = Klass,
+                                     __tostring = function()
+                                                    return klass.name
+                                                  end})
+  function klass:new(object)
+    print("Cat's new called")
+    object = setmetatable(object or {}, {__index    = klass,
+                                         __tostring = klass.tostring})
     return object
+  end
+  function klass:klass()
+    return getmetatable(self).__index
   end
   return klass
 end
 
-local Cat = Klass:new()
-
-function Cat:init(name)
-  self.name = name
-end
+local Cat = Klass:new{name = "Cat"}
+print(Cat:klass())
 
 function Cat:tostring()
   return self.name
 end
 
 function Cat:meow()
-  print(tostring(self) .. ": Meow~")
+  print(tostring(self:klass()) .. ": " .. tostring(self) .. ": Meow~")
 end
 
-local carol = Cat:new("Carol")
-local marol = Cat:new("Marol")
+local carol = Cat:new{name="Carol"}
+local marol = Cat:new{name="Marol"}
 
 carol:meow()
 marol:meow()
