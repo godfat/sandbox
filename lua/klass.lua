@@ -1,19 +1,21 @@
 
+local setmetatable = setmetatable
+local tostring     = tostring
+local print        = print
+
+module "klass"
+
 local Klass = {}
 setmetatable(Klass, Klass)
 Klass.__index    = Klass
-Klass.__tostring = function() return "Class" end
+Klass.__tostring = function() return "Klass" end
 
-function Klass:new()
-  local klass = {}
-  setmetatable(klass, Klass)
-  klass.__index = klass
+function Klass:new(klass)
+  klass = setmetatable(klass or {}, self)
   function klass:new(...)
-    local object = {}
-    setmetatable(object, klass)
-    -- i don't understand why this would work
-    klass.__tostring = object.tostring
-    -- i don't understand why this would work
+    local object = setmetatable({}, self)
+    self.__index = self
+    self.__tostring = object.tostring
     object:init(...)
     return object
   end
