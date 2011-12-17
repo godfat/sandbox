@@ -55,19 +55,26 @@ function send(agent, msg, ...)
         print(msg .. " unknown", ...)
     else
         local thread = coroutine.create(group.event[msg])
-        local r, command, events = coroutine.resume(thread, agent, ...)
-        assert(r, command)
-        if command == "listen" then
-            create_event_group(agent, events, thread, group)
+        while true do
+          local r, command, events = coroutine.resume(thread, agent, ...)
+          assert(r, command)
 
-        elseif command == "fork" then
-            create_event_group(agent, events, thread)
+          if command == "quit" then
+              pop_event_group(agent, group)
+              thread = group.thread
+              group  = group.parent
 
-        elseif command == "break" then
-            pop_event_group(agent, group)
-            thread = group.thread
-            group  = group.parent
+          elseif command == "listen" then
+              create_event_group(agent, events, thread, group)
+              break
 
+          elseif command == "fork" then
+              create_event_group(agent, events, thread)
+              break
+
+          else
+              break
+          end
         end
     end
 end
@@ -77,7 +84,7 @@ function listen(agent, msg)
 end
 
 function quit(agent)
-    coroutine.yield("break")
+    coroutine.yield("quit")
 end
 
 function fork(agent, msg)
