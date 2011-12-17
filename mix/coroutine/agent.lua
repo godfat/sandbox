@@ -55,22 +55,19 @@ function send(self, msg, ...)
         print(msg .. " unknown", ...)
     else
         local thread = coroutine.create(group.event[msg])
-        while true do
-            local r, command, events = coroutine.resume(thread, self, ...)
-            assert(r, command)
-            if command == "listen" then
-                create_event_group(self, events, thread, group)
-                break
-            elseif command == "fork" then
-                create_event_group(self, events, thread)
-                break
-            elseif command == "break" then
-                pop_event_group(self, group)
-                thread = group.thread
-                group  = group.parent
-            else
-                break
-            end
+        local r, command, events = coroutine.resume(thread, self, ...)
+        assert(r, command)
+        if command == "listen" then
+            create_event_group(self, events, thread, group)
+
+        elseif command == "fork" then
+            create_event_group(self, events, thread)
+
+        elseif command == "break" then
+            pop_event_group(self, group)
+            thread = group.thread
+            group  = group.parent
+
         end
     end
 end
