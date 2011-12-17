@@ -39,6 +39,30 @@ local function pop_event_group(agent, group)
     end
 end
 
+local function event_loop(agent, group, thread, args)
+  while true do
+    local r, command, events = coroutine.resume(thread, agent, args)
+    assert(r, command)
+
+    if command == "quit" then
+        pop_event_group(agent, group)
+        thread = group.thread
+        group  = group.parent
+
+    elseif command == "listen" then
+        create_event_group(agent, events, thread, group)
+        break
+
+    elseif command == "fork" then
+        create_event_group(agent, events, thread)
+        break
+
+    else
+        break
+    end
+  end
+end
+
 function create(main)
     local thread = coroutine.create(main)
     local agent  = setmetatable({ group = {} }, { __index = _M })
@@ -54,28 +78,7 @@ function send(agent, msg, ...)
     if group == nil then
         print(msg .. " unknown", ...)
     else
-        local thread = coroutine.create(group.event[msg])
-        while true do
-          local r, command, events = coroutine.resume(thread, agent, ...)
-          assert(r, command)
-
-          if command == "quit" then
-              pop_event_group(agent, group)
-              thread = group.thread
-              group  = group.parent
-
-          elseif command == "listen" then
-              create_event_group(agent, events, thread, group)
-              break
-
-          elseif command == "fork" then
-              create_event_group(agent, events, thread)
-              break
-
-          else
-              break
-          end
-        end
+        event_loop(agent, group, coroutine.create(group.event[msg]), ...)
     end
 end
 
