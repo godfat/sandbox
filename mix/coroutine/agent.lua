@@ -9,32 +9,32 @@ local pairs        = pairs
 
 module "agent"
 
-local function create_event_group(self, events, thread, parent_group)
+local function create_event_group(agent, events, thread, parent_group)
     local group = {event  = {}          ,
                    thread = thread      ,
                    parent = parent_group}
 
     if parent_group then
         for msg in pairs(parent_group.event) do
-            self.group[msg] = nil
+            agent.group[msg] = nil
         end
     end
 
     for msg, fun in pairs(events) do
         group.event[msg] = fun
-        assert(self.group[msg] == nil, msg)
-        self.group[msg] = group
+        assert(agent.group[msg] == nil, msg)
+        agent.group[msg] = group
     end
 end
 
-local function pop_event_group(self, group)
+local function pop_event_group(agent, group)
     for msg in pairs(group.event) do
-        self.group[msg] = nil
+        agent.group[msg] = nil
     end
     if group.parent then
         for msg in pairs(group.parent.event) do
-            assert(self.group[msg] == nil, msg)
-            self.group[msg] = group.parent
+            assert(agent.group[msg] == nil, msg)
+            agent.group[msg] = group.parent
         end
     end
 end
@@ -49,22 +49,22 @@ function create(main)
     return agent
 end
 
-function send(self, msg, ...)
-    local group = self.group[msg]
+function send(agent, msg, ...)
+    local group = agent.group[msg]
     if group == nil then
         print(msg .. " unknown", ...)
     else
         local thread = coroutine.create(group.event[msg])
-        local r, command, events = coroutine.resume(thread, self, ...)
+        local r, command, events = coroutine.resume(thread, agent, ...)
         assert(r, command)
         if command == "listen" then
-            create_event_group(self, events, thread, group)
+            create_event_group(agent, events, thread, group)
 
         elseif command == "fork" then
-            create_event_group(self, events, thread)
+            create_event_group(agent, events, thread)
 
         elseif command == "break" then
-            pop_event_group(self, group)
+            pop_event_group(agent, group)
             thread = group.thread
             group  = group.parent
 
