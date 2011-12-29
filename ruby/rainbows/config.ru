@@ -1,4 +1,6 @@
 
+require 'async-rack' # for coolio and eventmachine, not for FiberSpawn
+
 use Rack::ContentType
 use Rack::ContentLength
 use Rack::CommonLogger
@@ -22,7 +24,6 @@ end
 
 # use :CoolioFiberSpawn
 map '/io-coolio' do
-  require 'async-rack'
   run lambda{ |env|
     Rainbows.sleep 2
     ok
@@ -31,7 +32,6 @@ end
 
 # use :EventMachine
 map '/io-em' do
-  require 'async-rack'
   require 'rack/fiber_pool'
   use Rack::FiberPool
   run lambda{ |env|
