@@ -1,5 +1,5 @@
 
-require 'async-rack' # for coolio and eventmachine, not for FiberSpawn
+require 'async-rack' # for eventmachine only
 
 use Rack::ContentType
 use Rack::ContentLength
