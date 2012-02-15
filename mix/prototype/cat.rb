@@ -7,11 +7,11 @@ def Cat.meow
   puts "#{@name}: meow~"
 end
 
-Alice = Cat.clone
+Alice = Class.new(Cat)
 Alice.name = "Alice"
 Alice.meow
 
-Bob = Cat.clone
+Bob = Class.new(Cat)
 Bob  .name = "Bob"
 Bob  .meow
 
