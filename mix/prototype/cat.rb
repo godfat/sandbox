@@ -11,7 +11,7 @@ Alice = Class.new(Cat)
 Alice.name = "Alice"
 Alice.meow
 
-Bob = Class.new(Cat)
+Bob   = Class.new(Cat)
 Bob  .name = "Bob"
 Bob  .meow
 
