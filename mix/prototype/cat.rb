@@ -26,4 +26,4 @@ Bob.jump
 
 Carol.jump
 
-# Alice.jump # no jump
+# Alice.jump # no jump for Alice
