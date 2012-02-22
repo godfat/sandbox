@@ -1,5 +1,5 @@
 
-Cat = Class.new
+Cat = Class.new(Object)
 def Cat.name= name
   @name = name
 end
