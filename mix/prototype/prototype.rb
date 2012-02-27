@@ -1,3 +1,6 @@
+
+# written by caasi Huang
+
 class Prototype
   attr_accessor :prototype
   def initialize *obj
