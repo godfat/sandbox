@@ -23,4 +23,4 @@ main = do
       Left (Yield _ b') <- atomically (resume b)
       atomically (resume a')
       atomically (resume b')
-      atomically (readTVar i)  >>= print -- should be 2
+      atomically (readTVar i) >>= print -- should be 2
