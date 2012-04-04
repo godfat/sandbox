@@ -7,7 +7,9 @@ import Control.Monad.Trans (lift)
 import Control.Monad.Coroutine (Coroutine, resume)
 import Control.Monad.Coroutine.SuspensionFunctors (Yield(Yield), yield)
 
-fiber :: TVar Int -> Coroutine (Yield ()) STM ()
+type Fiber = Coroutine (Yield ()) STM ()
+
+fiber :: TVar Int -> Fiber
 fiber i = do
             t <- lift (readTVar i)
             yield ()

@@ -6,7 +6,9 @@ import Control.Monad.Trans (lift)
 import Control.Monad.Coroutine (Coroutine, resume)
 import Control.Monad.Coroutine.SuspensionFunctors (Yield(Yield), yield)
 
-fiber :: IORef Int -> Coroutine (Yield ()) IO ()
+type Fiber = Coroutine (Yield ()) IO ()
+
+fiber :: IORef Int -> Fiber
 fiber i = do
             t <- lift (readIORef i)
             yield ()
