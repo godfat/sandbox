@@ -1,3 +1,4 @@
+{-# LANGUAGE ScopedTypeVariables #-}
 
 import Control.Monad (filterM)
 
@@ -8,10 +9,10 @@ powerset = filterM (const [True, False])
 
 
 --         1.65 real         0.08 user         0.01 sys
-powerset' :: [a] -> [[a]]
+powerset' :: forall a. [a] -> [[a]]
 powerset'     [] = [[]]
 powerset' (x:xs) = concat $ map (powerset_) [True, False] where
-  -- powerset' :: Bool -> [[a]]
+  powerset_ :: Bool -> [[a]]
   powerset_ flg = map (\ys -> if flg then x:ys else ys) (powerset' xs)
 
 
