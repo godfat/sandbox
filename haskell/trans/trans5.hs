@@ -38,7 +38,7 @@ eval (Lam name expr) = ask >>= return . (Cls name expr)
 -- call by value
 eval (App exp1 exp2) = do Cls name expr env <- eval exp1
                           val               <- eval exp2
-                          local ((:) (name, val)) (eval expr)
+                          local ((name, val):) (eval expr)
 
 extract :: Expr -> Env -> IO (Either String (Val, Integer))
 extract expr env = runErrorT (runStateT (runReaderT (eval expr) env) 1)
