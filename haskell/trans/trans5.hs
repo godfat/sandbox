@@ -21,7 +21,7 @@ data Val = Num Int
 
 eval :: Expr -> ReaderT Env (StateT Integer (ErrorT String IO)) Val
 eval (Lit literal)   = return (Num literal)
-eval (Var name)      = do liftIO (putStrLn ("Looking " ++ name ++ "..."))
+eval (Var name)      = do liftIO (putStrLn ("Looking for " ++ name ++ "..."))
                           line <- get
                           put (line + 1)
                           mval <- asks (lookup name)
@@ -40,10 +40,15 @@ eval (App exp1 exp2) = do Cls name expr env <- eval exp1
                           val               <- eval exp2
                           local ((:) (name, val)) (eval expr)
 
-test0 = runStateT (runReaderT (eval (Lit 0)) [])               -- Num 0
-test1 = runStateT (runReaderT (eval (Var "x")) [("x", Num 1)]) -- Num 1
-test2 = runStateT (runReaderT (eval (Add (Lit 1) (Lit 1))) []) -- Num 2
-test3 = runStateT (runReaderT (eval (App (Lam "x" (Add (Lit 1) (Var "x"))) (Lit 2))) []) -- Num 3
-test4 = runStateT (runReaderT (eval (Var "y")) [("x", Num 1)]) -- Left "Var y not found."
-test5 = runStateT (runReaderT (eval (App (Lam "y" (Add (Lit 1) (Var "x"))) (Lit 2))) []) -- Left "Var x not found."
-test = [test0, test1, test2, test3, test4, test5]
+extract :: Expr -> Env -> IO (Either String (Val, Integer))
+extract expr env = runErrorT (runStateT (runReaderT (eval expr) env) 1)
+
+test0 = extract (Lit 0) []               -- Right (Num 0, 1)
+test1 = extract (Var "x") [("x", Num 1)] -- Right (Num 1, 2)
+test2 = extract (Add (Lit 1) (Lit 1)) [] -- Right (Num 2, 1)
+test3 = extract (App (Lam "x" (Add (Lit 1) (Var "x"))) (Lit 2)) []
+                                         -- Right (Num 3,2)
+test4 = extract (Var "y") [("x", Num 1)] -- Left "Var y not found."
+test5 = extract (App (Lam "y" (Add (Lit 1) (Var "x"))) (Lit 2)) []
+                                         -- Left "Var x not found."
+test = mapM_ (>>= print) [test0, test1, test2, test3, test4, test5]
