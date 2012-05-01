@@ -1,8 +1,9 @@
 
 module Main where
 
-import Prelude              hiding (fail)
-import Control.Monad.Reader hiding (fail)
+import Prelude hiding (fail)
+import Control.Monad.Reader (ReaderT, runReaderT,
+                             asks, local, join, liftM2, lift)
 
 import Test.HUnit (Test(TestCase, TestList), assertEqual, runTestTT)
 
