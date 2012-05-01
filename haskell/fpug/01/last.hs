@@ -1,5 +1,5 @@
 
-module FPUG.Last where
+module Main where
 
 import Prelude              hiding (fail)
 import Control.Monad.Reader hiding (fail)
