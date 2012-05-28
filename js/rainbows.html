@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <title>rainbows</title>
+    <meta charset="utf-8"/>
+    <style>
+      * { line-height: 0.95em; letter-spacing: -0.32em; font-size: 1.5em; }
+    </style>
+  </head>
+  <body>
+    <div id="container"/>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+    <script>
+      function rainbows(freq, i){
+        var r = Math.round(Math.sin(freq*i + 0*Math.PI/3) * 127 + 128);
+        var g = Math.round(Math.sin(freq*i + 2*Math.PI/3) * 127 + 128);
+        var b = Math.round(Math.sin(freq*i + 4*Math.PI/3) * 127 + 128);
+        return 'rgb('+r+','+g+','+b+')';
+      }
+
+      var width=200;
+      var freq=0.0003;
+      for(var i=0; i<width; ++i){
+        $('<span id="i'+i+'">|</span>').css({
+          color: rainbows(freq, i)
+        }).appendTo('#container');
+      }
+
+      var step = 0;
+      window.setInterval(function(){
+        for(var i=0; i<width; ++i, ++step){
+          $('#i'+i).css({color: rainbows(freq, i+step)});
+        }
+      }, 33);
+    </script>
+  </body>
+</html>
