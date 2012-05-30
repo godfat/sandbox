@@ -11,12 +11,6 @@
       var camera, scene, renderer;
       var cube, plane;
 
-      var targetRotation = 0;
-      var targetRotationOnMouseDown = 0;
-
-      var mouseX = 0;
-      var mouseXOnMouseDown = 0;
-
       var windowHalfX = window.innerWidth / 2;
       var windowHalfY = window.innerHeight / 2;
 
@@ -25,6 +19,9 @@
       var cube     = init_cube(scene);
       var plane    = init_plane(scene);
       var renderer = init_renderer();
+      var Rotation = init_Rotation();
+      var rotationX = new Rotation();
+      var rotationY = new Rotation();
 
       document.getElementById('container').appendChild(renderer.domElement);
       init_listener();
@@ -32,7 +29,9 @@
       var animate = function(){
         requestAnimationFrame(animate);
         plane.rotation.y = cube.rotation.y +=
-          (targetRotation - cube.rotation.y) * 0.05;
+          (rotationX.targetRotation - cube.rotation.y) * 0.05;
+        plane.rotation.x = cube.rotation.x +=
+          (rotationY.targetRotation - cube.rotation.x) * 0.05;
         renderer.render(scene, camera);
       };
       animate();
@@ -72,6 +71,26 @@
         renderer.setSize(window.innerWidth, window.innerHeight);
         return renderer;
       }
+      function init_Rotation(){
+        function Rotation(){
+          this.targetRotation = 0;
+          this.targetRotationOnMouseDown = 0;
+          this.mouse = 0;
+          this.mouseOnMouseDown = 0;
+        };
+
+        Rotation.prototype.focus = function(offset){
+          this.mouseOnMouseDown = offset;
+          this.targetRotationOnMouseDown = this.targetRotation;
+        };
+        Rotation.prototype.rotate = function(offset){
+          this.targetRotation =
+            this.targetRotationOnMouseDown +
+            (offset - this.mouseOnMouseDown) * 0.02;
+        };
+
+        return Rotation;
+      }
 
       function init_listener(){
         document.addEventListener('mousedown' , onMouseDown , false);
@@ -92,14 +111,13 @@
       function onMouseDown(event){
         event.preventDefault();
         enable_listener();
-        mouseXOnMouseDown = event.clientX - windowHalfX;
-        targetRotationOnMouseDown = targetRotation;
+        rotationX.focus(event.clientX - windowHalfX);
+        rotationY.focus(event.clientY - windowHalfY);
       }
 
       function onMouseMove(event){
-        mouseX = event.clientX - windowHalfX;
-        targetRotation =
-          targetRotationOnMouseDown + (mouseX - mouseXOnMouseDown) * 0.02;
+        rotationX.rotate(event.clientX - windowHalfX);
+        rotationY.rotate(event.clientY - windowHalfY);
       }
 
       function onMouseUp (event){ clear_listener(); }
