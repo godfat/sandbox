@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <title>cube</title>
+    <meta charset="utf-8"/>
+  </head>
+  <body>
+    <div id="container"/>
+    <script src="http://mrdoob.github.com/three.js/build/Three.js"></script>
+    <script src="http://gkz.github.com/prelude-ls/prelude-min.js"></script>
+    <script src="cube.js"></script>
+    <script>
+      var scene   = new Scene(window.innerWidth, window.innerHeight);
+      var control = new Control(scene, document);
+      document.getElementById('container').appendChild(scene.dom());
+      scene.animate(requestAnimationFrame);
+    </script>
+  </body>
+</html>
