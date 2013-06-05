@@ -14,7 +14,6 @@
 #      9 |    291  |     2.96%  |    4.58%
 
 from collections    import defaultdict
-from functools      import reduce
 from re             import compile
 from math           import log10
 
