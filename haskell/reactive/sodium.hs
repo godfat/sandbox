@@ -16,10 +16,10 @@ help = clearScreen >> setCursorPosition 0 0 >> putStrLn "Input a number:"
 main :: IO ()
 main = do
   help
-  (event, dispatch) <- sync newEvent
+  (eInput, dispatch) <- sync newEvent
   -- Why this warning without `_ <-' ?
   -- A do-notation statement discarded a result of type IO ().
-  _ <- sync $ setup event
+  _ <- sync $ setup eInput
   forever (getLine >>= sync . dispatch . read)
 
 
