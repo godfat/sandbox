@@ -18,6 +18,9 @@ main :: IO ()
 main = do
   help
   (handler, dispatch) <- newAddHandler
+
+
+
   compile (fromAddHandler handler >>= setup) >>= actuate
   forever (getLine >>= dispatch . read)
 
@@ -38,12 +41,10 @@ register eInput eEven eOdd = do
 
   reactimate $ fmap (\n -> do
                       setCursorPosition 1 0
-                      putStrLn ("Even? " ++ show n))
-                    eEven
+                      putStrLn ("Even? " ++ show n)) eEven
 
   reactimate $ fmap (\n -> do
                       setCursorPosition 2 0
-                      putStrLn (" Odd? " ++ show n))
-                    eOdd
+                      putStrLn (" Odd? " ++ show n)) eOdd
 
   reactimate $ fmap (const clearScreen) eInput

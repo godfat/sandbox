@@ -9,6 +9,7 @@ import System.Console.ANSI (setCursorPosition, clearScreen)
 -- cabal install sodium
 import FRP.Sodium (Event, Reactive, newEvent, sync, changes, hold, listen)
 
+
 help :: IO ()
 help = clearScreen >> setCursorPosition 0 0 >> putStrLn "Input a number:"
 
@@ -34,13 +35,13 @@ setup eInput = do
 
 -- register event handlers
 register :: (Event Int, Event Bool, Event Bool) -> Reactive (IO ())
+
 register (eInput, eEven, eOdd) = do
   listen eInput (const help)
 
   listen eEven  (\n -> do
                   setCursorPosition 1 0
                   putStrLn ("Even? " ++ show n))
-
 
   listen eOdd   (\n -> do
                   setCursorPosition 2 0
