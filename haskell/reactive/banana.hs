@@ -10,16 +10,16 @@ import System.Console.ANSI (setCursorPosition, clearScreen)
 import Reactive.Banana (Event, Moment, stepper)
 import Reactive.Banana.Frameworks
 
+help :: IO ()
+help = clearScreen >> setCursorPosition 0 0 >> putStrLn "Input a number:"
+
+
 main :: IO ()
 main = do
   help
   (handler, dispatch) <- newAddHandler
   compile (fromAddHandler handler >>= setup) >>= actuate
   forever (getLine >>= dispatch . read)
-
-
-help :: IO ()
-help = clearScreen >> setCursorPosition 0 0 >> putStrLn "Input a number:"
 
 
 setup :: Frameworks t => Event t Int -> Moment t ()
