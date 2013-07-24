@@ -23,6 +23,7 @@ main = do
   forever (getLine >>= sync . dispatch . read)
 
 
+-- setup data dependency
 setup :: Event Int -> Reactive (IO ())
 setup eInput = do
   eEven <- fmap changes $ hold True (fmap even eInput)
@@ -30,6 +31,7 @@ setup eInput = do
   register eInput eEven eOdd
 
 
+-- register event handlers
 register :: Event Int -> Event Bool -> Event Bool -> Reactive (IO ())
 register eInput eEven eOdd = do
   listen eInput (const help)

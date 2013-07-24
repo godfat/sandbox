@@ -22,6 +22,7 @@ main = do
   forever (getLine >>= dispatch . read)
 
 
+-- setup data dependency
 setup :: Frameworks t => Event t Int -> Moment t ()
 setup eInput = do
   eEven <- changes $ stepper True $ fmap even eInput
@@ -29,6 +30,7 @@ setup eInput = do
   register eInput eEven eOdd
 
 
+-- register event handlers
 register :: Frameworks t =>
             Event t Int -> Event t Bool -> Event t Bool -> Moment t ()
 register eInput eEven eOdd = do
