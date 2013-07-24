@@ -11,7 +11,6 @@ import FRP.Sodium (Event, Reactive, newEvent, sync, changes, hold, listen)
 
 main :: IO ()
 main = do
-  clearScreen
   help
   (event, dispatch) <- sync newEvent
   -- Why this warning without `_ <-' ?

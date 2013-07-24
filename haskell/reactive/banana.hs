@@ -12,7 +12,6 @@ import Reactive.Banana.Frameworks
 
 main :: IO ()
 main = do
-  clearScreen
   help
   (handler, dispatch) <- newAddHandler
   compile (fromAddHandler handler >>= setup) >>= actuate
