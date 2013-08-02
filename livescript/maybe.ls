@@ -26,8 +26,8 @@ class Just extends Maybe
 
 # For convenience
 unit    = maybe_unit
-just    = (value) -> new Just value
 nothing = new Nothing
+just    = (value) -> new Just value
 
 
 
