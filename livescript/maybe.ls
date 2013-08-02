@@ -8,21 +8,21 @@ maybe_unit = (x) -> new Just x
 # bind is called (>>=) in Haskell
 #     bind :: Maybe a -> (a -> Maybe b) -> Maybe b
 maybe_bind = (m, f) -> switch m.type
-                       case Just
-                         f(m.value)
                        case Nothing
                          new Nothing # or simply `m` or `nothing`
+                       case Just
+                         f(m.value)
 
 class Maybe
   unit:     -> maybe_unit(this)
   bind: (f) -> maybe_bind(this, f)
 
+class Nothing extends Maybe
+  type: Nothing
+
 class Just extends Maybe
   (value) -> @value = value
   type: Just
-
-class Nothing extends Maybe
-  type: Nothing
 
 # For convenience
 unit    = maybe_unit
