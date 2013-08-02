@@ -77,7 +77,7 @@ list = cons(0, cons(1, cons(2, cons(3, cons(4, empty))))) # [0, 1, 2, 3, 4]
 test.push list.bind((x) -> if x % 2 == 0 then unit(x * 2) else empty)
 # Also equivalent to this in Haskell:
 # [0..5] >>= \x -> if mod x 2 == 0 then return (x * 2) else []
-# or:
+# or with do notation, a syntactic sugar for using monad:
 # do{ x <- [0..5]; if mod x 2 == 0 then return (x * 2) else [] }
 
 
@@ -88,7 +88,7 @@ test.push((cons(0, cons(1, empty))).
      bind((y) -> unit(x + y))))
 # Also equivalent to this in Haskell:
 # [0..1] >>= \x -> [1..2] >>= \y -> return (x + y)
-# or:
+# or with do notation, a syntactic sugar for using monad:
 # do{ x <- [0..1]; y <- [1..2]; return (x + y) }
 
 
@@ -107,7 +107,7 @@ powerset = (xs) -> switch xs.type
 # powerset (x:xs) = [True, False] >>= \take -> powerset xs
 #                                 >>= \ys   -> if take then return (x:ys)
 #                                              else         return ys
-# or:
+# or with do notation, a syntactic sugar for using monad:
 # powerset []     = [[]]
 # powerset (x:xs) = do
 #   take <- [True, False]
@@ -121,3 +121,10 @@ test.push(powerset(cons(1, cons(2, cons(3, empty)))))
 
 
 console.log(require('util').inspect(test, false, null))
+
+# So as you can see:
+#
+# * Operator overloading matters.
+# * Syntactic sugar matters.
+#
+# We might not gain too much using (Haskell's) monad in other languages!
