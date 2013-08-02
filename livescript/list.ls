@@ -118,4 +118,6 @@ powerset = (xs) -> switch xs.type
 # [[1,2,3],[1,2],[1,3],[1],[2,3],[2],[3],[]]
 test.push(powerset(cons(1, cons(2, cons(3, empty)))))
 
+
+
 console.log(require('util').inspect(test, false, null))
