@@ -202,8 +202,9 @@ pFactor = pGroup <|> pNum
 
 \begin{code}
 pTerm :: Parser Double
-pTerm = chainl1 pFactor (char '*' *> pure (*)
-                     <|> char '/' *> pure (/))
+pTerm = pFactor >>= rest
+  where rest x = (op <*> pure x <*> pFactor >>= rest) <|> pure x
+        op     = char '*' *> pure (*) <|> char '/' *> pure (/)
 \end{code}
 
 
