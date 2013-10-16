@@ -202,8 +202,8 @@ pFactor = pGroup <|> pNum
 
 \begin{code}
 pTerm :: Parser Double
-pTerm = chainl1 pFactor ((char '*' >> return (*))
-                     <|> (char '/' >> return (/)))
+pTerm = chainl1 pFactor (char '*' *> pure (*)
+                     <|> char '/' *> pure (/))
 \end{code}
 
 
@@ -214,8 +214,8 @@ Expression, using (+) or (-) on operands.
 
 \begin{code}
 pExpression :: Parser Double
-pExpression = chainl1 pTerm ((char '+' >> return (+))
-                         <|> (char '-' >> return (-)))
+pExpression = chainl1 pTerm (char '+' *> pure (+)
+                         <|> char '-' *> pure (-))
 \end{code}
 
 
