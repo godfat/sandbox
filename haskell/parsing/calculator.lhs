@@ -43,7 +43,7 @@ don't consume all the input.
 test0 = run pInt "123"  -- Right 123
 test1 = run pInt "123a" -- Right 123
 test2 = run pInt "12a"  -- Right 12
-test3 = run pInt "a23"  -- Left "calculator0.hs" (line 1, column 1):
+test3 = run pInt "a23"  -- Left "calculator.lhs" (line 1, column 1):
                         -- unexpected "a"
                         -- expecting digit
 \end{code}
@@ -59,9 +59,9 @@ pInt' = do
   eof
   return (read val)
 
-test4 = run pInt "123a" -- Left "calculator.lhs" (line 1, column 4):
-                        -- unexpected 'a'
-                        -- expecting digit or end of input
+test4 = run pInt' "123a" -- Left "calculator.lhs" (line 1, column 4):
+                         -- unexpected 'a'
+                         -- expecting digit or end of input
 \end{code}
 
 
@@ -94,10 +94,10 @@ parser. We'll put that eof parser on the last parser which we would use.
 \begin{code}
 test5 = run pDouble "12.3"  -- Right 12.3
 test6 = run pDouble "1.2.3" -- Right 1.2
-test7 = run pDouble ".12.3" -- Left "calculator0.hs" (line 1, column 1):
+test7 = run pDouble ".12.3" -- Left "calculator.lhs" (line 1, column 1):
                             -- unexpected "."
                             -- expecting digit
-test8 = run pDouble "123"   -- Left "calculator0.hs" (line 1, column 4):
+test8 = run pDouble "123"   -- Left "calculator.lhs" (line 1, column 4):
                             -- unexpected end of input
                             -- expecting digit or "."
 \end{code}
