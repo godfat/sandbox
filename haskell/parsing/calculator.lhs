@@ -198,40 +198,13 @@ pFactor = pGroup <|> pNum
 
 
 \section{ Term Parser }
-Then a Term is a Factor '*' or '/' and a Term, using (*) or (/) on operands.
-Because parser combinator defines an LL parser, we need to put recursive
-cases on the last to avoid endless recursions. A Term is also a Factor,
-otherwise there's no base case. (or we should say Factor is the base case)
+
 
 \begin{code}
-pTerm' :: Parser Double
-pTerm' = try ((*) <$> pFactor <*> (char '*' *> pTerm'))
-     <|> try ((/) <$> pFactor <*> (char '/' *> pTerm'))
-     <|> pFactor
-\end{code}
-
-
-
-\section{ Term Parser: Make it look better }
-But using fmap (<$>) is ugly! We would want to put the parsing actions
-the end, not upfront, because at this point, we're more interested at
-the syntax instead of actions. We introduce (<&>) to combine parsing
-results instead of using ap (<*>), and `using' instead of fmap (<$>).
-
-\begin{code}
-(<&>) :: (Applicative f) => f a -> f b -> f (a, b)
-(<&>) = liftA2 (,)
-
-using :: (Applicative f) => f (a, b) -> (a -> b -> c) -> f c
-p `using` f = (uncurry f) <$> p
-
 pTerm :: Parser Double
-pTerm = try (pFactor <&> (char '*' *> pTerm) `using` (*))
-    <|> try (pFactor <&> (char '/' *> pTerm) `using` (/))
-    <|> pFactor
+pTerm = chainl1 pFactor ((char '*' >> return (*))
+                     <|> (char '/' >> return (/)))
 \end{code}
-
-Does this look better?
 
 
 
@@ -241,9 +214,8 @@ Expression, using (+) or (-) on operands.
 
 \begin{code}
 pExpression :: Parser Double
-pExpression = try (pTerm <&> (char '+' *> pExpression) `using` (+))
-          <|> try (pTerm <&> (char '-' *> pExpression) `using` (-))
-          <|> pTerm
+pExpression = chainl1 pTerm ((char '+' >> return (+))
+                         <|> (char '-' >> return (-)))
 \end{code}
 
 
@@ -260,6 +232,7 @@ test12 = run pCalculation "1+2a" -- Left "calculator.lhs" (line 1, column 4):
                                  -- expecting digit or end of input
 test13 = run pCalculation "(1-2)-3" -- Right -4.0
 test14 = run pCalculation "1-2-3"   -- XXX: Should be: Right -4.0
+test15 = run pCalculation "2/2/2"   -- XXX: Should be: Right 0.5
 \end{code}
 
 
