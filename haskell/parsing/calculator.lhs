@@ -258,6 +258,8 @@ test11 = run pCalculation "40-32/2" -- Right 24.0
 test12 = run pCalculation "1+2a" -- Left "calculator.lhs" (line 1, column 4):
                                  -- unexpected 'a'
                                  -- expecting digit or end of input
+test13 = run pCalculation "(1-2)-3" -- Right -4.0
+test14 = run pCalculation "1-2-3"   -- XXX: Should be: Right -4.0
 \end{code}
 
 
