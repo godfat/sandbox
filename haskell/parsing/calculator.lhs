@@ -198,14 +198,37 @@ pFactor = pGroup <|> pNum
 
 
 \section{ Term Parser }
+A Term is a Factor and '*' or '/' and a Factor, using (*) or (/) on operands.
+Because parser combinator defines an LL parser, we need to put recursive
+cases on the right to avoid infinite recursions, that is why we would try to
+parse a Factor first instead of writing it institutively like:
 
+    -- This would not terminate on an LL parser:
+    Term := Term '*' Factor | Term '/' Factor | Factor
+
+Rather, we do something like this:
+
+    Term := try (Factor ('*' | '/') Term) | Factor
 
 \begin{code}
-pTerm :: Parser Double
-pTerm = pFactor >>= rest
+pTerm' :: Parser Double
+pTerm' = pFactor >>= rest
   where rest x = (op <*> pure x <*> pFactor >>= rest) <|> pure x
         op     = char '*' *> pure (*) <|> char '/' *> pure (/)
 \end{code}
+
+
+
+\section{ Term Parser: Make it look better }
+We could also write it with `chainl1` from Parsec, which is cleaner:
+
+\begin{code}
+pTerm :: Parser Double
+pTerm = chainl1 pFactor (char '*' *> pure (*)
+                     <|> char '/' *> pure (/))
+\end{code}
+
+Does this look better?
 
 
 
@@ -232,8 +255,8 @@ test12 = run pCalculation "1+2a" -- Left "calculator.lhs" (line 1, column 4):
                                  -- unexpected 'a'
                                  -- expecting digit or end of input
 test13 = run pCalculation "(1-2)-3" -- Right -4.0
-test14 = run pCalculation "1-2-3"   -- XXX: Should be: Right -4.0
-test15 = run pCalculation "2/2/2"   -- XXX: Should be: Right 0.5
+test14 = run pCalculation "1-2-3"   -- Right -4.0
+test15 = run pCalculation "2/2/2"   -- Right 0.5
 \end{code}
 
 
