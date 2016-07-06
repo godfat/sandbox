@@ -10,7 +10,7 @@ root=/opt/gitlab/embedded/service/gitlab-rails
 gem install bundler rib bond readline_buffer --user --no-ri --no-rdoc
 
 # bundle install
-env BUNDLE_GEMFILE=$root/Gemfile bundle install --path ~/.gem --without mysql
+bundle install --gemfile $root/Gemfile --path ~/.gem --without mysql
 
 # Run the console
 sudo -E rib all -rrib/extra/autoindent -rrib/extra/paging -p $root auto production
