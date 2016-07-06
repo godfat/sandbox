@@ -1,11 +1,16 @@
-sudo apt install -y build-essential cmake libicu-dev pkg-config libpq-dev ruby-dev libreadline-dev nodejs
+# Ubuntu packages
+sudo apt install -y build-essential cmake libicu-dev pkg-config libpq-dev ruby-dev libreadline-dev nodejs libkrb5-dev
 
+# ENV
 export PATH=~/.gem/ruby/2.3.0/bin:$PATH
 export BUNDLE_APP_CONFIG=~/.bundle
-rails_root=/opt/gitlab/embedded/service/gitlab-rails
+root=/opt/gitlab/embedded/service/gitlab-rails
 
+# bundler and other gems
 gem install bundler rib bond readline_buffer --user --no-ri --no-rdoc
 
-env BUNDLE_GEMFILE=$rails_root/Gemfile bundle install --path ~/.gem --without mysql:kerberos
+# bundle install
+env BUNDLE_GEMFILE=$root/Gemfile bundle install --path ~/.gem --without mysql
 
-rib all -p $rails_root auto
+# Run the console
+sudo -E rib all -rrib/extra/autoindent -rrib/extra/paging -p $root auto production
