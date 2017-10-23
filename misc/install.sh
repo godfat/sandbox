@@ -2,15 +2,12 @@
 sudo apt install -y build-essential cmake libicu-dev pkg-config libpq-dev ruby-dev libreadline-dev nodejs libkrb5-dev
 
 # ENV
-export PATH=~/.gem/ruby/2.3.0/bin:$PATH
-export BUNDLE_APP_CONFIG=~/.bundle
-root=/opt/gitlab/embedded/service/gitlab-rails
+GEM=~/.gem/ruby/2.3.0
+OMNIBUS=/opt/gitlab/embedded
+ROOT=$OMNIBUS/service/gitlab-rails
 
-# bundler and other gems
-gem install bundler rib bond readline_buffer --user --no-ri --no-rdoc
-
-# bundle install
-bundle install --gemfile $root/Gemfile --path ~/.gem --without mysql
+# Extra gems
+$OMNIBUS/bin/gem install rib bond --user --no-ri --no-rdoc
 
 # Run the console
-sudo -E rib all -rrib/extra/autoindent -rrib/extra/paging -p $root auto production
+sudo $OMNIBUS/bin/chpst -e /opt/gitlab/etc/gitlab-rails/env -U `whoami` env PATH=$GEM/bin:$OMNIBUS/bin:$PATH GEM_PATH=$GEM:$OMNIBUS/lib/ruby/gems rib all -rrib/extra/paging -p $ROOT auto production
